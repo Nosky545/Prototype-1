@@ -12,18 +12,10 @@ public class PlayerController : MonoBehaviour
     private Camera activeCamera;
 
     private float turnSpeed = 5f;
-    private float horsePower = 20f;
+    private float speed = 20f;
 
     private float horizontalInput;
     private float verticalInput;
-
-    private Rigidbody playerRb;
-
-    public TextMeshProUGUI speedometerText;
-    public float speed;
-
-    public TextMeshProUGUI rpmText;
-    public float rpm;
 
     // Start is called before the first frame update
     void Start()
@@ -31,7 +23,6 @@ public class PlayerController : MonoBehaviour
         activeCamera = camera1;
         camera1.enabled = true;
         camera2.enabled = false;
-        playerRb = GetComponent<Rigidbody>();
     }
 
     // Update is called once per frame
@@ -42,7 +33,7 @@ public class PlayerController : MonoBehaviour
         verticalInput = Input.GetAxis("Vertical");
 
         // Move the vehicule
-        playerRb.AddRelativeForce(Vector3.forward * verticalInput * horsePower);
+        transform.Translate(speed * Time.deltaTime * verticalInput * Vector3.forward);
         transform.Rotate(horizontalInput * Time.deltaTime * turnSpeed * Vector3.up);
 
         // Camera Switcher
@@ -66,14 +57,5 @@ public class PlayerController : MonoBehaviour
         }
 
         
-    }
-
-    void Update()
-    {
-        speed = Mathf.Round(playerRb.velocity.magnitude * 3.6f);
-        speedometerText.text = "Speed: " + speed + "kph";
-
-        rpm = Mathf.Round(speed % 30 * 40);
-        rpmText.text = "RPM: " + rpm;
     }
 }
